@@ -1,0 +1,62 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+# Match appuser UID/GID to the mounted volume owner
+if [ -d "/opt/project/src" ]; then
+    HOST_UID=$(stat -c "%u" /opt/project/src)
+    HOST_GID=$(stat -c "%g" /opt/project/src)
+
+    if [ "$HOST_UID" != "0" ]; then
+        usermod -u "$HOST_UID" appuser 2>/dev/null || true
+        groupmod -g "$HOST_GID" appuser 2>/dev/null || true
+        chown -R appuser:appuser /opt/project 2>/dev/null || true
+    fi
+fi
+
+PORT="${APP_PORT:-8000}"
+
+show_help() {
+    echo """
+Usage: docker-compose -f <yaml-file> run <service> COMMAND
+Commands
+dev      : Start a Django development server
+bash     : Start a bash shell
+manage   : Start manage.py
+python   : Run a python command
+shell    : Start a Django Python shell
+add      : Add package via Poetry
+help     : Show this message
+"""
+}
+
+case "$1" in
+    dev)
+        # Ensure SQLite db is writable by appuser
+        touch /opt/project/src/db.sqlite3
+        chown appuser:appuser /opt/project/src/db.sqlite3
+        gosu appuser poetry run python manage.py migrate
+        exec gosu appuser poetry run python manage.py runserver 0.0.0.0:"${PORT}"
+    ;;
+    bash)
+        exec gosu appuser /bin/bash "${@:2}"
+    ;;
+    add)
+        exec gosu appuser poetry add "${@:2}"
+    ;;
+    manage)
+        exec gosu appuser poetry run python manage.py "${@:2}"
+    ;;
+    python)
+        exec gosu appuser poetry run python "${@:2}"
+    ;;
+    shell)
+        exec gosu appuser poetry run python manage.py shell
+    ;;
+    *)
+        show_help
+        exit 1
+    ;;
+esac

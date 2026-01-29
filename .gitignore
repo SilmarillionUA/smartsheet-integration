@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+.mypy_cache
+.pytest_cache
+.ruff_cache/
+
+# Django
+*.log
+db.sqlite3
+media/
+
+# Node
+node_modules/
+dist/
+
+# Environment
+.env
+
+# Editor
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
