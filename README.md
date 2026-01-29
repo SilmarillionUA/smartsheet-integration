@@ -2,6 +2,9 @@
 
 A web app for managing hierarchical task lists backed by Smartsheet.
 
+![Web app](./screen-1.png)
+![Smartsheet](./screen-2.png)
+
 ## What I built
 
 A checklist manager where each list is actually a Smartsheet sheet. You can create tasks, nest them under other tasks (indent/outdent), reorder them, and track status. All data lives in Smartsheet - the local database only stores user accounts and sheet references.
