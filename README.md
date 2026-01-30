@@ -1,4 +1,4 @@
-# Smartsheet Checklist App by Planeks
+# Smartsheet Checklist App by PLANEKS
 
 A web app for managing hierarchical task lists backed by Smartsheet.
 
