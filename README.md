@@ -26,7 +26,8 @@ docker compose -f compose.dev.yml up --build
 
 # App runs at http://localhost:8000
 # Frontend at http://localhost:5173
-```
+``` 
+NOTE: this app got developed in Linux environment and was not tested on Mac or Windows.
 
 You'll need a Smartsheet API token. Register in the app and paste your token during registration - the app stores it encrypted and uses it for all your Smartsheet operations.
 
